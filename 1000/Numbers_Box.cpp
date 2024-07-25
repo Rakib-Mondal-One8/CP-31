@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
-/*Problem Link -> https://codeforces.com/problemset/problem/1614/B*/
+/*Problem Link -> */
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double lld;
@@ -58,28 +58,27 @@ int nXOR(int n) {if (n % 4 == 0)return n; if (n % 4 == 1)return 1; if (n % 4 == 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 void solve()
 {
-	int n;
-	cin >> n;
-	vector<pll>a(n);
-	loop(i, 0, n - 1) {
-		cin >> a[i].first;
-		a[i].second = i;
+	int n, m;
+	cin >> n >> m;
+	ll ans = 0;
+	int neg = 0, mn = INT_MAX;
+	bool ok = false;
+	loop(i, 1, n) {
+		loop(j, 1, m) {
+			int x;
+			cin >> x;
+			if (x == 0)ok = true;
+			if (x < 0)neg++;
+			ans += abs(x);
+			mn = min(mn, abs(x));
+		}
+
 	}
-	sort(a.rbegin(), a.rend());
-	vector<ll>ans(n);
-	ll tot = 0;
-	ll dist = 1;
-	for (ll i = 0; i < n; i += 2) {
-		ans[a[i].second] = dist;
-		if (i != n - 1)ans[a[i + 1].second] = -1 * dist;
-		tot += 2 * dist * a[i].first;
-		if (i != n - 1) tot += 2 * dist * a[i + 1].first;
-		dist++;
-	}
-	cout << tot << nl;
-	cout << 0 << " ";
-	for (auto e : ans)cout << e << " ";
-	cout << nl;
+	debug(mn);
+	debug(ans);
+	if (ok) cout << ans << nl;
+	else if (neg % 2)cout << ans - 2 * mn << nl;
+	else cout << ans << nl;
 }
 int main()
 {

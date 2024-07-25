@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
-/*Problem Link -> https://codeforces.com/problemset/problem/1614/B*/
+/*Problem Link -> */
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double lld;
@@ -58,28 +58,15 @@ int nXOR(int n) {if (n % 4 == 0)return n; if (n % 4 == 1)return 1; if (n % 4 == 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 void solve()
 {
-	int n;
-	cin >> n;
-	vector<pll>a(n);
-	loop(i, 0, n - 1) {
-		cin >> a[i].first;
-		a[i].second = i;
-	}
-	sort(a.rbegin(), a.rend());
-	vector<ll>ans(n);
-	ll tot = 0;
-	ll dist = 1;
-	for (ll i = 0; i < n; i += 2) {
-		ans[a[i].second] = dist;
-		if (i != n - 1)ans[a[i + 1].second] = -1 * dist;
-		tot += 2 * dist * a[i].first;
-		if (i != n - 1) tot += 2 * dist * a[i + 1].first;
-		dist++;
-	}
-	cout << tot << nl;
-	cout << 0 << " ";
-	for (auto e : ans)cout << e << " ";
-	cout << nl;
+	ll x, y, k;
+	cin >> x >> y >> k;
+	ll coal = k * y;
+	ll stk = coal + k;
+	stk--;
+	ll tot = stk / (x - 1);
+	ll ot = stk % (x - 1);
+	(ot) ? tot++ : tot = tot;
+	cout << tot + k << nl;
 }
 int main()
 {
