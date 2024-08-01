@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
-/*Problem Link -> https://codeforces.com/problemset/problem/1899/B*/
+/*Problem Link -> https://codeforces.com/problemset/problem/1511/C*/
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double lld;
@@ -58,41 +58,32 @@ int nXOR(int n) {if (n % 4 == 0)return n; if (n % 4 == 1)return 1; if (n % 4 == 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 void solve()
 {
-	int n;
-	cin >> n;
-	vector<ll>a(n + 1, 0), pref1(n + 1, 0);
-	loop(i, 1, n)cin >> a[i];
-	pref1[1] = a[1];
-	loop(i, 2, n)pref1[i] = pref1[i - 1] + a[i];
-	debug(pref1);
-	ll ans = 0;
-	for (int k = 1; k <= n; k++) {
-		if ((n % k == 0 ) && (n / k >= 2)) {
-			ll mx = LLONG_MIN;
-			ll mn = LLONG_MAX;
-			int l = 1, r = k;
-			while (r <= n) {
-				ll sum = (pref1[r] - pref1[l - 1]);
-				debug(sum);
-				debug(r);
-				debug(l);
-				mx = max(sum, mx);
-				mn = min(sum, mn);
-				r += k;
-				l += k;
-			}
-			ans = max(ans, mx - mn);
-		}
+	int n, q;
+	cin >> n >> q;
+	map<int, int>mp;
+	loop(i, 1, n) {
+		int x;
+		cin >> x;
+		if (mp.find(x) == mp.end()) mp[x] = i;
 	}
-	cout << ans << nl;
-
+	debug(mp);
+	vector<int>v(q);
+	loop(i, 0, q - 1)cin >> v[i];
+	for (auto e : v) {
+		cout << mp[e] << " ";
+		int idx = mp[e];
+		for (auto &x : mp) {
+			if (x.second < idx) x.second++;
+		}
+		mp[e] = 1;
+	}
 }
 int main()
 {
 	init_code();
 	fastio();
 	int t = 1;
-	cin >> t;
+	// cin >> t;
 	auto start1 = high_resolution_clock::now();
 	while (t--)
 	{
