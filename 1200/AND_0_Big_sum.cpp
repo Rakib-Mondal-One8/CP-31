@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
-/*Problem Link -> https://codeforces.com/problemset/problem/1536/B*/
+/*Problem Link -> Problem - 1514B - Codeforces*/
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double lld;
@@ -60,45 +60,13 @@ int nXOR(int n) {if (n % 4 == 0)return n; if (n % 4 == 1)return 1; if (n % 4 == 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 void solve()
 {
-	int n;
-	cin >> n;
-	string s;
-	cin >> s;
-	vector<bool>cnt(26, false);
-	for (auto e : s)cnt[e - 'a'] = true;
-	debug(cnt);
-	for (char i = 'a'; i <= 'z'; i++) {
-		if (!cnt[i - 'a']) {
-			cout << i << nl;
-			return;
-		}
+	ll n, k;
+	cin >> n >> k;
+	ll ans = 1;
+	for (int i = 1; i <= k; i++) {
+		ans = (ans * n) % mod;
 	}
-	set<string>st;
-	for (int i = 0; i < n - 1; i++)st.insert(s.substr(i, 2));
-	for (int i = 0; i < 26; i++) {
-		for (int j = 0; j < 26; j++) {
-			string tmp = "";
-			tmp += char('a' + i);
-			tmp += char('a' + j);
-			if (st.find(tmp) == st.end()) {
-				cout << tmp << nl;
-				return;
-			}
-		}
-	}
-	set<string>st2;
-	for (int i = 0; i < n - 2; i++)st2.insert(s.substr(i, 3));
-	for (int i = 0; i < 26; i++) {
-		for (int j = 0; j < 26; j++) {
-			string tmp = "a";
-			tmp += char('a' + i);
-			tmp += char('a' + j);
-			if (st2.find(tmp) == st2.end()) {
-				cout << tmp << nl;
-				return;
-			}
-		}
-	}
+	cout << ans << nl;
 }
 int main()
 {
