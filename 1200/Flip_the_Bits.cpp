@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
-/*Problem Link -> https://codeforces.com/problemset/problem/1520/D*/
+/*Problem Link -> */
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double lld;
@@ -60,21 +60,33 @@ void solve()
 {
 	int n;
 	cin >> n;
-	vector<int>a(n + 1);
-	loop(i, 1, n)cin >> a[i];
-	debug(a);
-	map<int, int>mp;
-	loop(i, 1, n)mp[a[i] - i]++;
-	debug(mp);
-	ll ans = 0;
-	for (int i = n; i >= 1; i--) {
-		if (mp.find(a[i] - i) != mp.end()) {
-			mp[a[i] - i] -= 1;
-			ans += mp[a[i] - i];
-			if (mp[a[i] - i] == 0)mp.erase(a[i] - i);
+	string a, b;
+	cin >> a >> b;
+	vector<int>pref1(n), pref0(n);
+	pref1[0] = (a[0] == '1') ? 1 : 0;
+	pref0[0] = (a[0] == '0') ? 1 : 0;
+	loop(i, 1, n - 1) {
+		pref1[i] = pref1[i - 1] ;
+		(a[i] == '1') ? pref1[i] += 1 : pref1[i] += 0;
+		pref0[i] = pref0[i - 1];
+		(a[i] == '0') ? pref0[i] += 1 : pref0[i] += 0;
+	}
+	int i = n - 1;
+	bool ok = true;
+	while (i >= 0) {
+		while (i >= 0 && a[i] == b[i] )i--;
+		if (i >= 0 && pref0[i] != pref1[i]) {
+			ok = false;
+			break;
+		}
+		while (i >= 0 && a[i] != b[i])i--;
+		if (i >= 0 && pref0[i] != pref1[i]) {
+			ok = false;
+			break;
 		}
 	}
-	cout << ans << nl;
+	if (ok == true)Yes;
+	else No;
 }
 int main()
 {

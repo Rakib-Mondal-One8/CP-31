@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
-/*Problem Link -> https://codeforces.com/problemset/problem/1520/D*/
+/*Problem Link -> https://codeforces.com/problemset/problem/1497/B*/
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double lld;
@@ -58,20 +58,21 @@ int nXOR(int n) {if (n % 4 == 0)return n; if (n % 4 == 1)return 1; if (n % 4 == 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 void solve()
 {
-	int n;
-	cin >> n;
-	vector<int>a(n + 1);
-	loop(i, 1, n)cin >> a[i];
-	debug(a);
-	map<int, int>mp;
-	loop(i, 1, n)mp[a[i] - i]++;
-	debug(mp);
+	ll n, m;
+	cin >> n >> m;
+	vector<ll>a(n);
+	map<ll, int>mp;
+	loop(i, 0, n - 1) {
+		cin >> a[i];
+		mp[a[i] % m]++;
+	}
 	ll ans = 0;
-	for (int i = n; i >= 1; i--) {
-		if (mp.find(a[i] - i) != mp.end()) {
-			mp[a[i] - i] -= 1;
-			ans += mp[a[i] - i];
-			if (mp[a[i] - i] == 0)mp.erase(a[i] - i);
+	for (auto &e : mp) {
+		if (e.first == 0)ans++;
+		else if (2 * e.first == m)ans++;
+		else if (2 * e.first < m || mp.find(m - e.first) == mp.end()) {
+			int x = e.second, y = mp[m - e.first];
+			ans += 1 + max(0, abs(x - y) - 1);
 		}
 	}
 	cout << ans << nl;
