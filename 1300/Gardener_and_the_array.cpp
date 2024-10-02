@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
-/*Problem Link -> https://codeforces.com/problemset/problem/1794/C*/
+/*Problem Link -> Problem - 1775B - Codeforces*/
 typedef long long ll;
 typedef unsigned long long ull;
 typedef long double lld;
@@ -58,20 +58,31 @@ ll lcm(ll a, ll b) {return (a / __gcd(a, b)) * b;}
 int nXOR(int n) {if (n % 4 == 0)return n; if (n % 4 == 1)return 1; if (n % 4 == 2)return n + 1; return 0;}
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+const int N = 2 * 1e5 + 10;
 void solve()
 {
+	unordered_map<int, int>a;
+	unordered_map<int, int>mp;
 	int n;
 	cin >> n;
-	vector<int>a(n + 1);
-	loop(i, 1, n)cin >> a[i];
-	cout << 1 << " ";
-	int i = 2;
-	int idx = 1;
-	loop(k, i, n) {
-		while ((k - idx) + 1 > a[idx])idx++;
-		cout << 1 + (k - idx) << " ";
+	loop(i, 1, n) {
+		int m;
+		cin >> m;
+		loop(j, 1, m) {
+			int x;
+			cin >> x;
+			a[x]++;
+			mp[x] = i;
+		}
 	}
-	cout << nl;
+	vector<int>b(n + 1, true);
+	for (auto e : a) {
+		if (e.second - 1 == 0) b[mp[e.first]] = false;
+	}
+	bool ok = false;
+	loop(i, 1, n)ok |= b[i];
+	if (!ok)No;
+	else Yes;
 }
 int main()
 {
