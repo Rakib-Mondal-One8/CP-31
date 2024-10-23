@@ -1,9 +1,0 @@
-mx 9
-tot 10
-mx 11
-tot 10
-mx 5
-tot 5
-mx 6
-tot 5
-Time: 0 ms
