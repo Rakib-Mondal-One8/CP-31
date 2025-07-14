@@ -37,26 +37,38 @@ ll mod_div(ll a, ll b, ll m) { a = a % m; b = b % m; return (mod_mul(a, mminvpri
 int nXOR(int n) { if (n % 4 == 0)return n; if (n % 4 == 1)return 1; if (n % 4 == 2)return n + 1; return 0; }
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
-const int N = 2e5 + 1;
-vector<ll>pref(N + 1, 0);
-void go() {
-    for (ll i = 1;i <= N;i++)pref[i] = pref[i - 1] + i;
-}
 void solve()
 {
-    ll n, k, x;
-    cin >> n >> k >> x;
+    ll n;
+    cin >> n;
 
-    ll min_sum = pref[k];
-    ll max_sum = pref[n] - pref[n - k];
-
-    if (x >= min_sum && x <= max_sum)Yes;
-    else No;
+    vector<pll>primeFactor;
+    ll x = n;
+    for (ll i = 2;i <= 3;i++) {
+        ll cnt = 0;
+        while (x % i == 0) {
+            x /= i;
+            cnt++;
+        }
+        primeFactor.push_back({ i,cnt });
+    }
+    ll cnt2 = primeFactor[0].second, cnt3 = primeFactor[1].second;
+    if (cnt2 > cnt3) {
+        cout << -1 << nl;
+        return;
+    }
+    ll y = cnt3 - cnt2;
+    ll ans = y;
+    while (y--)n *= 2;
+    debug(n, primeFactor);
+    while (n % 6 == 0)n /= 6, ans++;
+    debug(n);
+    if (n == 1)cout << ans << nl;
+    else cout << -1 << nl;
 }
 int32_t main()
 {
     fastio();
-    go();
     int t = 1;
     cin >> t;
     while (t--)
