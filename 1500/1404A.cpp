@@ -32,39 +32,38 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 void RakibOne8()
 {
-	int n;
-	cin >> n;
+	int n, k;
+	cin >> n >> k;
 
-	map<int, vector<int>>pos;
-	for (int i = 1; i <= n; i++) {
-		int x;
-		cin >> x;
+	string s;
+	cin >> s;
 
-		if (pos[x].size() == 0)pos[x].push_back(0);
-		pos[x].push_back(i);
-	}
+	for (int i = k; i < n; i++) {
+		if (s[i] == '1') {
+			if (s[i % k] == '0') {
+				cout << "NO" << nl;
+				return;
+			}
 
-	int INF = 1e18;
-	vector<int>ans(n + 1, INF);
-
-	for (auto [x, y] : pos) {
-		y.push_back(n + 1);
-		int m = y.size();
-		int distance = -INF;
-		for (int j = 1; j < m; j++) {
-			int curDistance = y[j] - y[j - 1] - 1;
-			distance = max(distance, curDistance);
+			s[i % k] = '1';
 		}
-
-		ans[distance + 1] = min(ans[distance + 1], x);
+		else if (s[i] == '0') {
+			if (s[i % k] == '1') {
+				cout << "NO" << nl;
+				return;
+			}
+			s[i % k] = '0';
+		}
 	}
 
-	for (int i = 1; i <= n; i++) {
-		ans[i] = min(ans[i - 1], ans[i]);
+	int c0 = 0, c1 = 0;
+	for (int i = 0; i < k; i++) {
+		if (s[i] == '0')c0++;
+		if (s[i] == '1')c1++;
 	}
 
-	for (int i = 1; i < n + 1; i++)(ans[i] == INF) ? cout << -1 << " " : cout << ans[i] << " ";
-	cout << nl;
+	if (c0 > k / 2 || c1 > k / 2)cout << "NO" << nl;
+	else cout << "YES" << nl;
 }
 int32_t main()
 {
