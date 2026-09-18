@@ -1,2 +1,4 @@
-fa = [ 3 3 2 1 ] fb = [ 5 5 4 3 2 1 ] 
+result = -1 
+result = -1 
+cnt = [ {-1, 1} {-1, 1} ] 
 Time: 0 ms
