@@ -17,7 +17,7 @@ void init_code() {
 using namespace chrono;
 
 /*_________________________________________________________________________________________________________________________________________________________________________________________________________________________*/
-const int mod = 1e18 + 7;
+const int mod = 1e9 + 7;
 int expo(int a, int b, int mod) { int res = 1; while (b > 0) { if (b & 1)res = (res * a) % mod; a = (a * a) % mod; b = b >> 1; } return res; }
 int mminvprime(int a, int b) { return expo(a, b - 2, b); }
 int inv(int i) { if (i == 1) return 1; return (mod - ((mod / i) * inv(mod % i)) % mod) % mod; }
@@ -36,29 +36,35 @@ void RakibOne8()
 	int n;
 	cin >> n;
 
+	vector<vector<int>>edges(n + 1);
+	for (int i = 0; i < n - 1; i++) {
+		int u, v;
+		cin >> u >> v;
 
-	vector<long double>v1(n);
-	vector<long double>v2(n);
+		edges[u].push_back(v);
+		edges[v].push_back(u);
+	}
 
-	for (auto &x : v1)cin >> x;
-	for (auto &x : v2)cin >> x;
 
-	map<long double, int>cnt;
 	int answer = 0;
-	for (int i = 0; i < n; i++) {
-		if (v1[i] == 0)continue;
-		long double result = -v2[i] / v1[i];
-		debug(result);
-		cnt[result]++;
-	}
-	debug(cnt);
+	auto dfs = [&](auto && self, int cur, int parent)->int{
+		int sz = 1;
 
-	for (auto [x, y] : cnt) {
-		answer = max(answer, y);
-	}
-	for (int i = 0; i < n; i++) {
-		if (v1[i] == 0 && v2[i] == 0)answer++;
-	}
+		for (auto child : edges[cur]) {
+			if (child != parent) {
+				sz += self(self, child, cur);
+			}
+		}
+
+		if (sz % 2 == 0 && parent != -1) {
+			answer++;
+			return 0;
+		}
+		return sz;
+	};
+
+	int res = dfs(dfs, 1, -1);
+	if (res % 2)answer = -1;
 
 	cout << answer << nl;
 }

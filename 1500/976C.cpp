@@ -17,7 +17,7 @@ void init_code() {
 using namespace chrono;
 
 /*_________________________________________________________________________________________________________________________________________________________________________________________________________________________*/
-const int mod = 1e18 + 7;
+const int mod = 1e9 + 7;
 int expo(int a, int b, int mod) { int res = 1; while (b > 0) { if (b & 1)res = (res * a) % mod; a = (a * a) % mod; b = b >> 1; } return res; }
 int mminvprime(int a, int b) { return expo(a, b - 2, b); }
 int inv(int i) { if (i == 1) return 1; return (mod - ((mod / i) * inv(mod % i)) % mod) % mod; }
@@ -36,31 +36,36 @@ void RakibOne8()
 	int n;
 	cin >> n;
 
-
-	vector<long double>v1(n);
-	vector<long double>v2(n);
-
-	for (auto &x : v1)cin >> x;
-	for (auto &x : v2)cin >> x;
-
-	map<long double, int>cnt;
-	int answer = 0;
+	vector<vector<int>>v1;
 	for (int i = 0; i < n; i++) {
-		if (v1[i] == 0)continue;
-		long double result = -v2[i] / v1[i];
-		debug(result);
-		cnt[result]++;
-	}
-	debug(cnt);
+		int x, y;
+		cin >> x >> y;
 
-	for (auto [x, y] : cnt) {
-		answer = max(answer, y);
-	}
-	for (int i = 0; i < n; i++) {
-		if (v1[i] == 0 && v2[i] == 0)answer++;
+		v1.push_back({x, y, i + 1});
 	}
 
-	cout << answer << nl;
+	sort(v1.begin(), v1.end(), [&](vector<int>&v1, vector<int>&v2) {
+		if (v1[0] == v2[0])return v1[1] > v2[1];
+		else return v1[0] < v2[0];
+	});
+	debug(v1);
+
+	int mx = v1[0][1];
+	int index = v1[0][2];
+
+	for (int i = 1; i < n; i++) {
+		if (v1[i][1] <= mx) {
+			cout << v1[i][2] << " " << index << nl;
+			return;
+		}
+		if (mx <= v1[i][1]) {
+			mx = v1[i][1];
+			index = v1[i][2];
+		}
+	}
+
+	cout << -1 << " " << -1 << nl;
+
 }
 int32_t main()
 {

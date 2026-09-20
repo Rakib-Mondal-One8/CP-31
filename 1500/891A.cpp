@@ -17,7 +17,7 @@ void init_code() {
 using namespace chrono;
 
 /*_________________________________________________________________________________________________________________________________________________________________________________________________________________________*/
-const int mod = 1e18 + 7;
+const int mod = 1e9 + 7;
 int expo(int a, int b, int mod) { int res = 1; while (b > 0) { if (b & 1)res = (res * a) % mod; a = (a * a) % mod; b = b >> 1; } return res; }
 int mminvprime(int a, int b) { return expo(a, b - 2, b); }
 int inv(int i) { if (i == 1) return 1; return (mod - ((mod / i) * inv(mod % i)) % mod) % mod; }
@@ -36,31 +36,63 @@ void RakibOne8()
 	int n;
 	cin >> n;
 
-
-	vector<long double>v1(n);
-	vector<long double>v2(n);
-
-	for (auto &x : v1)cin >> x;
-	for (auto &x : v2)cin >> x;
-
-	map<long double, int>cnt;
-	int answer = 0;
-	for (int i = 0; i < n; i++) {
-		if (v1[i] == 0)continue;
-		long double result = -v2[i] / v1[i];
-		debug(result);
-		cnt[result]++;
-	}
-	debug(cnt);
-
-	for (auto [x, y] : cnt) {
-		answer = max(answer, y);
-	}
-	for (int i = 0; i < n; i++) {
-		if (v1[i] == 0 && v2[i] == 0)answer++;
+	vector<int>v1(n);
+	int ones = 0;
+	for (auto &x : v1) {
+		cin >> x;
+		if (x == 1)ones++;
 	}
 
-	cout << answer << nl;
+	if (ones) {
+		cout << n - ones << nl;
+		return;
+	}
+
+	int minOp = INT_MAX;
+	int cur = v1[0];
+	for (int i = 1; i < n; i++) {
+		cur = __gcd(cur, v1[i]);
+
+		if (cur == 1) {
+			int op = 0;
+			int newCur = v1[i];
+			for (int j = i - 1; j >= 0; j--) {
+				newCur = __gcd(newCur, v1[j]);
+				op++;
+
+				if (newCur == 1)break;
+			}
+			minOp = min(minOp, op);
+			debug(op, minOp);
+			break;
+		}
+	}
+
+	cur = v1[n - 1];
+	for (int i = n - 2; i >= 0; i--) {
+		cur = __gcd(cur, v1[i]);
+
+		if (cur == 1) {
+			debug(i);
+			int op = 0;
+			int newCur = v1[i];
+			for (int j = i + 1; j < n; j++) {
+				newCur = __gcd(newCur, v1[j]);
+				op++;
+
+				if (newCur == 1)break;
+			}
+			minOp = min(minOp, op);
+			break;
+		}
+	}
+
+	if (minOp == INT_MAX) {
+		cout << -1 << nl;
+		return;
+	}
+	cout << minOp + (n - 1) << nl;
+
 }
 int32_t main()
 {
