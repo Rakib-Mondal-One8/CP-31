@@ -1,4 +1,0 @@
-stk = [ a ] pos = 1 n = 1 
-stk = [ a b ] pos = 2 n = 2 
-stk = [ x ] pos = 1 n = 1 
-Time: 0 ms
