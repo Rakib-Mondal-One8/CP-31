@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define int long long
+#define double long double
 #define sz(x) ((int)(x).size())
 #define nl '\n'
 #ifdef Rakib_18
@@ -10,7 +11,7 @@ using namespace std;
 #endif
 void init_code() {
 #ifdef Rakib_18
-    freopen("Error.txt", "w", stderr);
+	//freopen("in.txt", "r", stdin);
 #endif
 }
 using namespace chrono;
@@ -30,80 +31,74 @@ int nXOR(int n) { if (n % 4 == 0)return n; if (n % 4 == 1)return 1; if (n % 4 ==
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 /*_________________________________________________________________________________________________________________________________________________________________________________________________________________________*/
 
-void RakibOne8() {
-    int n;
-    cin >> n;
+void RakibOne8()
+{
+	int n,k;
+	cin>>n>>k;
 
-    vector<int>a(n);
-    for (auto &x : a)cin >> x;
+	vector<int>v1;
+	for(int i=0;i<n;i++){
+		int x;
+		cin>>x;
 
-    vector<int>b(n);
-    for (auto &x : b)cin >> x;
+		v1.push_back(x);
+	}
 
-    vector<int>prefix(n + 1);
-    prefix[0] = 0;
-    for (int i = 0; i < n; i++) {
-        prefix[i + 1] = prefix[i] + b[i];
-    }
+	debug(v1);
 
-    auto go = [&](int x, int l)->int{
+	auto goCheck =[&](int x)->bool{
+		for(int i=0;i<n;i++){
 
-        int low = l + 1, high = n;
-        int idx = 0;
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            if (prefix[mid] - prefix[l] <= x) {
-                idx = mid;
-                low = mid + 1;
-            } else high = mid - 1;
-        }
-        return idx - 1;
-    };
+			int cost = 0;
+			for(int j=i,y = x;j<n;j++, y--){
+				if(v1[j] >= y)break;
 
+				if(j == n-1) cost+=1e9;
+				else cost+= abs(v1[j] - y);
 
-    vector<int>contribution(n + 1);
-    vector<int>ans(n + 1);
-    for (int i = 0; i < n; i++) {
-        int mxIndex = go(a[i], i);
-        debug(mxIndex);
+			}
 
-        if (mxIndex < 0) {
-            mxIndex = i;
+			if(cost<=k)return true;
+		}
 
-            ans[i] += a[i];
-            continue;
-        }
-        contribution[i] += 1;
-        contribution[mxIndex + 1] -= 1;
+		return false;
+	};
 
-        int remaining = a[i] - (prefix[mxIndex + 1] - prefix[i]);
-        if (remaining > 0)
-            ans[mxIndex + 1] += remaining;
-    }
+	auto goBs = [&]()->int{
+		int low = *max_element(v1.begin(),v1.end());
+		int high =low + n;
+		int answer = 0;
+		while(low<=high){
+			int mid = low + (high-low)/2;
 
-    for (int i = 1; i < n + 1; i++)contribution[i] = contribution[i - 1] + contribution[i];
+			if(goCheck(mid)){
+				answer = max(answer,mid);
+				low = mid+1;
+			}
+			else high = mid-1;
+		}
 
-    for (int i = 0; i < n; i++) {
-        ans[i] += (contribution[i] * b[i]);
-    }
+		return answer;
+	};
 
-    for (int i = 0; i < n; i++)cout << ans[i] << " ";
-    cout << nl;
+	cout<<goBs()<<nl;
 
 }
-int32_t main() {
-    init_code();
-    ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-    int t = 1;
-    cin >> t;
-    auto start1 = high_resolution_clock::now();
-    while (t--) {
-        RakibOne8();
-    }
-    auto stop1 = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(stop1 - start1);
+int32_t main()
+{
+	init_code();
+	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
+	int t = 1;
+	// cin >> t;
+	auto start1 = high_resolution_clock::now();
+	while (t--)
+	{
+		RakibOne8();
+	}
+	auto stop1 = high_resolution_clock::now();
+	auto duration = duration_cast<microseconds>(stop1 - start1);
 #ifdef Rakib_18
-    cerr << "Time: " << duration . count() / 1000 << " ms" << endl;
+	cerr << "Time: " << duration . count() / 1000 << " ms" << endl;
 #endif
-    return 0;
+	return 0;
 }
