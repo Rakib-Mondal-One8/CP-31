@@ -89,7 +89,6 @@ void RakibOne8()
 		ans[i] += (contribution[i] * b[i]);
 	}
 
-
 	for (int i = 0; i < n; i++)cout << ans[i] << " ";
 	cout << nl;
 
